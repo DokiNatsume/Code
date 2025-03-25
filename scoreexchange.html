@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <!-- 基础元信息 -->
+    <meta charset="UTF-8">
+    <title>成绩等级转换器</title>
+    
+    <!-- 样式设计 -->
+    <style>
+        /* 主容器样式 */
+        .container {
+            max-width: 600px;        /* 最大宽度限制 */
+            margin: 50px auto;       /* 垂直间距 + 水平居中 */
+            padding: 20px;           /* 内边距 */
+            text-align: center;      /* 内容居中 */
+            font-family: Arial, sans-serif;  /* 字体设置 */
+        }
+
+        /* 标题样式 */
+        h1 {
+            color: #2c3e50;          /* 深蓝色标题 */
+        }
+
+        /* 转换器主体样式 */
+        .converter {
+            background-color: #f9f9f9;  /* 浅灰色背景 */
+            padding: 20px;           /* 内边距 */
+            border-radius: 8px;      /* 圆角边框 */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  /* 阴影效果 */
+        }
+
+        /* 数字输入框样式 */
+        input[type="number"] {
+            width: 200px;            /* 固定宽度 */
+            padding: 8px;            /* 内边距 */
+            margin: 10px;            /* 外边距 */
+            border: 2px solid #3498db;  /* 蓝色边框 */
+            border-radius: 4px;      /* 圆角 */
+            font-size: 16px;         /* 字体大小 */
+        }
+
+        /* 按钮基础样式 */
+        button {
+            background-color: #3498db;  /* 蓝色背景 */
+            color: white;            /* 白色文字 */
+            padding: 10px 20px;      /* 按钮内边距 */
+            border: none;            /* 无边框 */
+            border-radius: 4px;      /* 圆角 */
+            cursor: pointer;         /* 手型指针 */
+            font-size: 16px;         /* 字体大小 */
+            transition: background-color 0.3s;  /* 颜色过渡动画 */
+        }
+
+        /* 按钮悬停效果 */
+        button:hover {
+            background-color: #2980b9;  /* 深蓝色 */
+        }
+
+        /* 结果展示区域 */
+        #result {
+            margin-top: 20px;        /* 顶部外边距 */
+            font-size: 18px;         /* 字体大小 */
+            font-weight: bold;       /* 加粗 */
+        }
+
+        /* 错误提示样式 */
+        .error {
+            color: #e74c3c;          /* 红色错误提示 */
+        }
+
+        /* 成功提示样式 */
+        .success {
+            color: #2ecc71;          /* 绿色成功提示 */
+        }
+    </style>
+</head>
+<body>
+    <!-- 页面主体结构 -->
+    <div class="container">
+        <h1>成绩等级转换</h1>
+        <div class="converter">
+            <!-- 转换表单 -->
+            <form onsubmit="return convertGrade(event)">
+                <!-- 数字输入框 -->
+                输入成绩：
+                <input 
+                    type="number"     /* 限制输入类型为数字 */
+                    id="score" 
+                    min="0"          /* 最小值限制 */
+                    max="100"        /* 最大值限制 */
+                    step="0.1"       /* 允许小数输入 */
+                    placeholder="请输入成绩（0-100）"  /* 占位提示 */
+                    required         /* 必填验证 */
+                >
+                <!-- 提交按钮 -->
+                <button type="submit">转换</button>
+            </form>
+            <!-- 结果显示区域 -->
+            <div id="result"></div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * 成绩转换主函数
+         * @param {Event} event 表单提交事件
+         */
+        function convertGrade(event) {
+            event.preventDefault();  // 阻止表单默认提交行为
+            
+            // DOM元素获取
+            const scoreInput = document.getElementById('score');
+            const resultDiv = document.getElementById('result');
+            const score = parseFloat(scoreInput.value);  // 转换为浮点数
+
+            /* 输入验证逻辑 */
+            if (isNaN(score) || score < 0 || score > 100) {
+                resultDiv.textContent = "错误：请输入0-100之间的有效数字";
+                resultDiv.className = 'error';  // 应用错误样式
+                return false;  // 终止函数执行
+            }
+
+            /* 核心转换逻辑 */
+            let grade;
+            if (score >= 90) {
+                grade = '优秀（A）';    // 90-100分
+            } else if (score >= 80) {
+                grade = '良好（B）';    // 80-89分
+            } else if (score >= 70) {
+                grade = '中等（C）';    // 70-79分
+            } else if (score >= 60) {
+                grade = '及格（D）';    // 60-69分
+            } else {
+                grade = '不及格（E）';  // 0-59分
+            }
+
+            /* 结果显示逻辑 */
+            resultDiv.textContent = `成绩等级：${grade}`;  // 使用模板字符串
+            resultDiv.className = 'success';  // 应用成功样式
+            return false;  // 阻止表单提交
+        }
+    </script>
+</body>
+</html>
